@@ -1,0 +1,36 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2024-04-15-01-01
+      author: mahammad
+      changes:
+        - createTable:
+            tableName: users
+            remarks: Table to store information about users
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+              - column:
+                  name: surname
+                  type: VARCHAR(255)
+              - column:
+                  name: username
+                  type: VARCHAR(255)
+                  constraints:
+                    unique: true
+              - column:
+                  name: age
+                  type: INT
+              - column:
+                  name: password
+                  type: VARCHAR(255)
+              - column:
+                  name: gender_type
+                  type: VARCHAR(50)

@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: ms-announcement-project
+
+server:
+  port: 8084
+  servlet:
+    context-path: /announcement-app

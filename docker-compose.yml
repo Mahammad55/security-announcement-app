@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  custom-mysql:
+    hostname: mysql
+    image: mysql
+    container_name: ms-project
+    restart: always
+    ports:
+      - '3306:3306'
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=12345
+      - MYSQL_DATABASE=ms_db
+    networks:
+      - my_network
+    volumes:
+      - db:/var/lib/mysql
+
+
+  custom-redis:
+    image: redis
+    container_name: redis-cache
+    networks:
+      - my_network
+    ports:
+      - '6371:6379'
+    volumes:
+      - db:/data
+
+
+  custom-adminer:
+    image: adminer
+    ports:
+      - 8085:8080
+    depends_on:
+      - custom-mysql
+    restart: always
+    networks:
+      - my_network
+
+volumes:
+  db:
+
+networks:
+  my_network:
