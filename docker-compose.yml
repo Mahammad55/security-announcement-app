@@ -32,6 +32,7 @@ services:
 
   custom-adminer:
     image: adminer
+    container_name: adminer
     ports:
       - 8085:8080
     depends_on:

@@ -13,7 +13,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.Date;
 
 @Component
 @Slf4j
@@ -27,16 +26,14 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String token = request.getHeader(AUTHORIZATION);
-        if (token != null && token.startsWith(BEARER_)) {
-            String tokenWithoutBearer = token.substring(BEARER_.length());
-
-            Date date = jwtService.extractClaims(tokenWithoutBearer, Claims::getExpiration);
-            if (date.before(new Date())) return;
-
-            String username = jwtService.extractClaims(tokenWithoutBearer, Claims::getSubject);
-            Authentication authentication = jwtService.getAuthentication(username);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+        String authorizationHeader = request.getHeader(AUTHORIZATION);
+        if (authorizationHeader != null && authorizationHeader.startsWith(BEARER_)) {
+            String jwtToken = authorizationHeader.substring(BEARER_.length());
+            if (jwtService.validateToken(jwtToken)) {
+                String username = jwtService.extractClaims(jwtToken, Claims::getSubject);
+                Authentication authentication = jwtService.getAuthentication(username);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
         }
         filterChain.doFilter(request, response);
     }
